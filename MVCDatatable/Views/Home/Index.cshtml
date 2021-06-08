@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Part 2: jQuery DataTable server side pagination and sorting in asp.net MVC</h2>
+<div style="width:90%; margin:0 auto;">
+    <table id="myTable">
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Company</th>
+                <th>Phone</th>
+                <th>Country</th>
+                <th>City</th>
+                <th>Postal Code</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@* Load datatable css *@
+<link href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet" />
+@section Scripts{
+    @* Load DataTable js here *@
+    <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            //getAllMessages();
+            getAllMessages();
+
+            setInterval(function () {
+                $('#myTable').DataTable().ajax.reload(null, false);
+
+
+            }, 1000);
+        
+        });
+
+
+        function getAllMessages()
+        {
+            $("#myTable").dataTable().fnDestroy()
+
+
+            var table = $("#myTable").DataTable({
+                //"destroy": true,
+                "sPaginationType": "full_numbers",
+                "processing": false, // for show progress bar
+                "serverSide": true, // for process server side
+                "filter": false, // this is for disable filter (search box)
+                "orderMulti": false, // for disable multiple column at once
+                "ajax": {
+                    "url": "/home/LoadData",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columns": [
+                        { "data": "ContactName", "name": "ContactName", "autoWidth": true },
+                        { "data": "CompanyName", "name": "CompanyName", "autoWidth": true },
+                        { "data": "Phone", "name": "Phone", "autoWidth": true },
+                        { "data": "Country", "name": "Country", "autoWidth": true },
+                        { "data": "City", "name": "City", "autoWidth": true },
+                        { "data": "PostalCode", "name": "PostalCode", "autoWidth": true }
+                ]
+            });
+
+        }
+    </script>
+}
+
